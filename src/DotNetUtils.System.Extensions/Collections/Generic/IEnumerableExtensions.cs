@@ -58,6 +58,39 @@ namespace System.Collections.Generic
             }
         }
 
+        public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
+        {
+            return source.MaxBy(selector, null);
+        }
+
+        public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey> comparer)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            if (selector == null) throw new ArgumentNullException("selector");
+            comparer ??= Comparer<TKey>.Default;
+
+            using (var sourceIterator = source.GetEnumerator())
+            {
+                if (!sourceIterator.MoveNext())
+                {
+                    throw new InvalidOperationException("Sequence contains no elements");
+                }
+                var max = sourceIterator.Current;
+                var maxKey = selector(max);
+                while (sourceIterator.MoveNext())
+                {
+                    var candidate = sourceIterator.Current;
+                    var candidateProjected = selector(candidate);
+                    if (comparer.Compare(candidateProjected, maxKey) > 0)
+                    {
+                        max = candidate;
+                        maxKey = candidateProjected;
+                    }
+                }
+                return max;
+            }
+        }
+
         /// <summary>
         /// Attempt to run <paramref name="func"/> within
         /// the LINQ <see cref="IEnumerable{T}.Aggregate"/>
@@ -96,5 +129,10 @@ namespace System.Collections.Generic
             => kvps.ToDictionary(
                 keySelector: kvp => kvp.Key,
                 elementSelector: kvp => kvp.Value);
+
+        public static Dictionary<TKey, TValue> ToValueDictionary<TKey, TValue>(this IEnumerable<TValue> values, Func<TValue, TKey> keySelector)
+            => values.ToDictionary(
+                keySelector: values => keySelector(values),
+                elementSelector: values => values);
     }
 }
