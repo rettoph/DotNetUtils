@@ -130,7 +130,7 @@ namespace System.Collections.Generic
                 keySelector: kvp => kvp.Key,
                 elementSelector: kvp => kvp.Value);
 
-        public static Dictionary<TKey, TValue> ToValueDictionary<TKey, TValue>(this IEnumerable<TValue> values, Func<TValue, TKey> keySelector)
+        public static Dictionary<TKey, TValue> ToDictionaryByValue<TKey, TValue>(this IEnumerable<TValue> values, Func<TValue, TKey> keySelector)
             => values.ToDictionary(
                 keySelector: values => keySelector(values),
                 elementSelector: values => values);

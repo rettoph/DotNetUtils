@@ -4,8 +4,7 @@ using System.Text;
 
 namespace DotNetUtils.General.Interfaces
 {
-    public interface IOrderable<T>
-        where T : class, IOrderable<T>
+    public interface IOrderable
     {
         Int32 Order { get; set; }
     }

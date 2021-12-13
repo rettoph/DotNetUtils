@@ -12,7 +12,7 @@ namespace System
             return types.GetTypesAssignableFrom(typeof(TBase));
         }
         public static IEnumerable<Type> GetTypesAssignableFrom(this IEnumerable<Type> types, Type baseType)
-            => types.Where(t => baseType.IsAssignableFrom(t) || (baseType.IsGenericType && t.IsSubclassOfRawGeneric(baseType)));
+            => types.Where(t => baseType.IsAssignableFrom(t) || (baseType.IsGenericType && t.IsSubclassOfGenericDefinition(baseType)));
 
         /// <summary>
         /// As advertised, stolen from here:
@@ -21,8 +21,13 @@ namespace System
         /// <param name="type"></param>
         /// <param name="generic"></param>
         /// <returns></returns>
-        public static bool IsSubclassOfRawGeneric(this Type type, Type generic)
+        public static bool IsSubclassOfGenericDefinition(this Type type, Type generic)
         {
+            if(!generic.IsGenericTypeDefinition)
+            {
+                return false;
+            }
+
             while (type != null && type != typeof(object))
             {
                 var cur = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
@@ -35,6 +40,22 @@ namespace System
             }
             return false;
         }
+
+        public static Boolean IsAssignableToOrSubclassOfGenericDefinition(this Type child, Type parent)
+        {
+            if (parent.IsAssignableFrom(child))
+            {
+                return true;
+            }
+
+            if (parent.IsGenericTypeDefinition && child.IsSubclassOfGenericDefinition(parent))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
 
         public static IEnumerable<Type> GetTypesWithAttribute<TBase, TAttribute>(this IEnumerable<Type> types, Boolean inherit = true)
             where TAttribute : Attribute
@@ -95,7 +116,7 @@ namespace System
             }
             else if(parent.IsGenericType && !parent.IsConstructedGenericType)
             {
-                while (type.IsSubclassOfRawGeneric(parent))
+                while (type.IsSubclassOfGenericDefinition(parent))
                 {
                     yield return type;
                     type = type.BaseType;
@@ -128,11 +149,11 @@ namespace System
         /// 
         /// If it is not, throw an exception.
         /// </summary>
-        /// <param name="baseType"></param>
         /// <param name="targetType"></param>
+        /// <param name="baseType"></param>
         public static Boolean ValidateAssignableFrom(this Type baseType, Type targetType)
         {
-            if (!baseType.IsAssignableFrom(targetType) && !targetType.IsSubclassOfRawGeneric(baseType))
+            if (!baseType.IsAssignableFrom(targetType) && !targetType.IsSubclassOfGenericDefinition(baseType))
                 throw new ArgumentException($"Unable to assign Type<{targetType.Name}> to Type<{baseType.Name}>.");
 
             return true;
@@ -143,11 +164,11 @@ namespace System
         /// 
         /// If it is not, throw an exception.
         /// </summary>
-        /// <typeparam name="TTarget"></typeparam>
-        /// <param name="baseType"></param>
-        public static Boolean ValidateAssignableFrom<TTarget>(this Type baseType)
+        /// <typeparam name="TBase"></typeparam>
+        /// <param name="targetType"></param>
+        public static Boolean ValidateAssignableFrom<TBase>(this Type targetType)
         {
-            return baseType.ValidateAssignableFrom(typeof(TTarget));
+            return typeof(TBase).ValidateAssignableFrom(targetType);
         }
     }
 }

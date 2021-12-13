@@ -4,8 +4,7 @@ using System.Text;
 
 namespace DotNetUtils.General.Interfaces
 {
-    public interface IPrioritizable<T>
-        where T : class, IPrioritizable<T>
+    public interface IPrioritizable
     {
         Int32 Priority { get; set; }
     }

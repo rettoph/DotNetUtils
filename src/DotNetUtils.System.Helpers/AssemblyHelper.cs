@@ -10,9 +10,6 @@ namespace System
     /// <summary>
     /// Simple static helper class used to interact
     /// with all loaded assemblies and their types.
-    /// 
-    /// This is required to dynamically load and configure
-    /// games, scenes, layers, and even service loaders.
     /// </summary>
     public class AssemblyHelper : IDisposable
     {
@@ -43,9 +40,8 @@ namespace System
         public IReadOnlyCollection<Type> Types => _types;
 
         public IReadOnlyCollection<AssemblyName> WithAssembliesReferencing => _shouldReference;
+
         #region Helper Methods
-
-
         /// <summary>
         /// Create a new <see cref="AssemblyHelper"/> instance with a default <paramref name="entry"/>
         /// and <paramref name="withAssembliesReferencing"/> assembly.
@@ -109,7 +105,7 @@ namespace System
             }
             
             if(assembly.GetReferencedAssemblies().Any(nan => _shouldReference.Any(r => AssemblyName.ReferenceMatchesDefinition(nan, r))))
-            { // The recieved assembly references the _shuoldReference assembly...
+            { // The recieved assembly references the _shouldReference assembly...
                 return true;
             }
 
