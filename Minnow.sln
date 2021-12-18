@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31019.35
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A2FB8E04-563B-4600-8280-903CEA685FE6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minnow.System.Extensions", "src\Minnow.System.Extensions\Minnow.System.Extensions.csproj", "{9A30ECDA-30BF-439B-B5A2-A5B3D7F15EFD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minnow.System.Helpers", "src\Minnow.System.Helpers\Minnow.System.Helpers.csproj", "{832972D9-4EE2-4B62-BDF3-AB3A7C4FD949}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minnow.Delegates", "src\Minnow.Delegates\Minnow.Delegates.csproj", "{23FC632A-3DEE-453C-ABB2-3DBEC4E1E715}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minnow.MonoGame.Extensions", "src\Minnow.MonoGame.Extensions\Minnow.MonoGame.Extensions.csproj", "{E77C5642-6312-4441-9976-B6932BB61B5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minnow.General", "src\Minnow.General\Minnow.General.csproj", "{997C6F66-31BD-48B0-AC30-57754710078C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9A30ECDA-30BF-439B-B5A2-A5B3D7F15EFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A30ECDA-30BF-439B-B5A2-A5B3D7F15EFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A30ECDA-30BF-439B-B5A2-A5B3D7F15EFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A30ECDA-30BF-439B-B5A2-A5B3D7F15EFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{832972D9-4EE2-4B62-BDF3-AB3A7C4FD949}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{832972D9-4EE2-4B62-BDF3-AB3A7C4FD949}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{832972D9-4EE2-4B62-BDF3-AB3A7C4FD949}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{832972D9-4EE2-4B62-BDF3-AB3A7C4FD949}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23FC632A-3DEE-453C-ABB2-3DBEC4E1E715}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23FC632A-3DEE-453C-ABB2-3DBEC4E1E715}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23FC632A-3DEE-453C-ABB2-3DBEC4E1E715}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23FC632A-3DEE-453C-ABB2-3DBEC4E1E715}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E77C5642-6312-4441-9976-B6932BB61B5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E77C5642-6312-4441-9976-B6932BB61B5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E77C5642-6312-4441-9976-B6932BB61B5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E77C5642-6312-4441-9976-B6932BB61B5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{997C6F66-31BD-48B0-AC30-57754710078C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{997C6F66-31BD-48B0-AC30-57754710078C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{997C6F66-31BD-48B0-AC30-57754710078C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{997C6F66-31BD-48B0-AC30-57754710078C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9A30ECDA-30BF-439B-B5A2-A5B3D7F15EFD} = {A2FB8E04-563B-4600-8280-903CEA685FE6}
+		{832972D9-4EE2-4B62-BDF3-AB3A7C4FD949} = {A2FB8E04-563B-4600-8280-903CEA685FE6}
+		{23FC632A-3DEE-453C-ABB2-3DBEC4E1E715} = {A2FB8E04-563B-4600-8280-903CEA685FE6}
+		{E77C5642-6312-4441-9976-B6932BB61B5D} = {A2FB8E04-563B-4600-8280-903CEA685FE6}
+		{997C6F66-31BD-48B0-AC30-57754710078C} = {A2FB8E04-563B-4600-8280-903CEA685FE6}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C660ACA2-FB70-43EC-ADB7-3F2039C0397F}
+	EndGlobalSection
+EndGlobal
