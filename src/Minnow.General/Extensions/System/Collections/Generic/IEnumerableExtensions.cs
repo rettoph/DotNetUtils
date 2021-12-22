@@ -20,6 +20,12 @@ namespace System.Collections.Generic
                 values);
         }
 
+        public static DoubleDictionary<TKey1, TKey2, TValue> ToDoubleDictionary<TKey1, TKey2, TValue>(
+            this IEnumerable<(TKey1 key1, TKey2 key2, TValue value)> kkvps)
+        {
+            return new DoubleDictionary<TKey1, TKey2, TValue>(kkvps);
+        }
+
         public static IEnumerable<T> PrioritizeBy<T, TKey>(this IEnumerable<T> prioritizables, Func<T, TKey> prioritizer)
             where T : class, IPrioritizable
         {

@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 namespace Minnow.General
 {
-    public class DoubleDictionary<TKey1, TKey2, TValue>
+    public class DoubleDictionary<TKey1, TKey2, TValue> : IEnumerable<(TKey1 key1, TKey2 key2, TValue value)>
     {
         private readonly Boolean _keySelectorsDefined;
         private readonly Func<TValue, TKey1> _key1Selector;
@@ -51,6 +53,19 @@ namespace Minnow.General
 
             _dic1 = values.ToDictionaryByValue(v => keySelector1(v));
             _dic2 = values.ToDictionaryByValue(v => keySelector2(v));
+        }
+        public DoubleDictionary(
+            IEnumerable<(TKey1 key1, TKey2 key2, TValue value)> kkvps)
+        {
+            _keySelectorsDefined = false;
+
+            _dic1 = new Dictionary<TKey1, TValue>();
+            _dic2 = new Dictionary<TKey2, TValue>();
+
+            foreach((TKey1 key1, TKey2 key2, TValue value) kkvp in kkvps)
+            {
+                this.TryAdd(kkvp.key1, kkvp.key2, kkvp.value);
+            }
         }
         #endregion
 
@@ -100,6 +115,18 @@ namespace Minnow.General
         {
             _dic1.Clear();
             _dic2.Clear();
+        }
+        #endregion
+
+        #region IEnumerable<(TKey1 key1, TKey2 key2, TValue value)> Implementation
+        public IEnumerator<(TKey1 key1, TKey2 key2, TValue value)> GetEnumerator()
+        {
+            return Enumerable.Zip<TKey1, TKey2, TValue>(_dic1.Keys, _dic2.Keys, _dic1.Values).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
         }
         #endregion
     }
