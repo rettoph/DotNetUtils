@@ -59,12 +59,6 @@ namespace System
             };
 
             this.TryAddAssembly(entry ?? Assembly.GetEntryAssembly());
-
-            Console.WriteLine("Start Output:");
-            foreach(Assembly assembly in _assemblies)
-            {
-                Console.WriteLine(assembly.FullName);
-            }
         }
 
         /// <summary>

@@ -8,7 +8,7 @@ namespace System
     public static class StringExtensions
     {
 #if DEBUG
-        private static Dictionary<String, UInt32> Lookup = new Dictionary<String, UInt32>();
+        public static Dictionary<String, UInt32> Lookup = new Dictionary<String, UInt32>();
 #endif
         public static UInt32 xxHash(this String value)
         {
@@ -21,8 +21,6 @@ namespace System
             hash = XXH32.DigestOf(Encoding.UTF8.GetBytes(value));
 
             Lookup.Add(value, hash);
-
-            Console.WriteLine($"{hash} => {value}");
 
             return hash;
 #endif
