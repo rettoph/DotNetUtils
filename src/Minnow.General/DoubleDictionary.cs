@@ -116,12 +116,17 @@ namespace Minnow.General
             _dic1.Clear();
             _dic2.Clear();
         }
+
+        public IEnumerable<(TKey1 key1, TKey2 key2, TValue value)> GetItems()
+        {
+            return Enumerable.Zip<TKey1, TKey2, TValue>(_dic1.Keys, _dic2.Keys, _dic1.Values);
+        }
         #endregion
 
         #region IEnumerable<(TKey1 key1, TKey2 key2, TValue value)> Implementation
         public IEnumerator<(TKey1 key1, TKey2 key2, TValue value)> GetEnumerator()
         {
-            return Enumerable.Zip<TKey1, TKey2, TValue>(_dic1.Keys, _dic2.Keys, _dic1.Values).GetEnumerator();
+            return this.GetItems().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
