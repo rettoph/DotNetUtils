@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace System
+﻿namespace System
 {
-    public delegate void OnEventDelegate<TSender>(TSender sender);
+    public delegate void OnEventDelegate<TArgs>(TArgs args);
     public delegate void OnEventDelegate<TSender, TArgs>(TSender sender, TArgs args);
     public delegate void OnEventDelegate<TSender, TArg1, TArg2>(TSender sender, TArg1 arg1, TArg2 arg2);
     public delegate void OnEventDelegate<TSender, TArg1, TArg2, TArg3>(TSender sender, TArg1 arg1, TArg2 arg2, TArg3 arg3);
