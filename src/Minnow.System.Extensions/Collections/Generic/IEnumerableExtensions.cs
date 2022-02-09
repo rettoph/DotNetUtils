@@ -110,9 +110,10 @@ namespace System.Collections.Generic
                 return fallback;
         }
 
-        public static T TryGetElementAt<T>(this IEnumerable<T> source, Int32 index, Int32 fallback = 0)
+        public static Boolean TryGetElementAt<T>(this IEnumerable<T> source, Int32 index, out T instance)
         {
-            return source.ElementAtOrDefault(index) ?? source.ElementAt(fallback);
+            instance = source.ElementAtOrDefault(index);
+            return instance is null;
         }
 
         public static T Random<T>(this IEnumerable<T> source, Random rand = default)
