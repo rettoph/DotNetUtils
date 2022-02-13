@@ -1,27 +1,29 @@
 ﻿using Minnow.General.Interfaces;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Minnow.General
 {
-    public class Pool<T> : IPool<T>
-        where T : class
+    public class ConcurrentPool<T> : IPool<T>
+            where T : class
     {
-        private Stack<T> _pool;
+        private ConcurrentStack<T> _pool;
         private UInt16 _poolSize;
         private UInt16 _maxPoolSize;
 
-        public Pool(UInt16 maxPoolSize) : this(ref maxPoolSize)
+        public ConcurrentPool(UInt16 maxPoolSize) : this(ref maxPoolSize)
         {
 
         }
-        public Pool(ref UInt16 maxPoolSize)
+        public ConcurrentPool(ref UInt16 maxPoolSize)
         {
             _maxPoolSize = maxPoolSize;
             _poolSize = 0;
-            _pool = new Stack<T>();
+            _pool = new ConcurrentStack<T>();
         }
 
         /// <inheritdoc />
@@ -34,9 +36,8 @@ namespace Minnow.General
             if(_pool.TryPop(out instance))
             {
                 _poolSize--;
-
                 return true;
-            }
+            }    
 
             return false;
         }

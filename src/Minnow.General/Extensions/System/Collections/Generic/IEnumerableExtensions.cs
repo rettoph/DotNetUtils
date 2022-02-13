@@ -9,6 +9,14 @@ namespace System.Collections.Generic
 {
     public static class IEnumerableExtensions
     {
+        public static Map<TKey1, TKey2> ToMap<TKey1, TKey2, TValue>(
+            this IEnumerable<TValue> input,
+            Func<TValue, TKey1> keySelector1,
+            Func<TValue, TKey2> keySelector2)
+        {
+            return new Map<TKey1, TKey2>(input.Select(keySelector1), input.Select(keySelector2));
+        }
+
         public static DoubleDictionary<TKey1, TKey2, TValue> ToDoubleDictionary<TKey1, TKey2, TValue>(
             this IEnumerable<TValue> values,
             Func<TValue, TKey1> keySelector1,
