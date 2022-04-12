@@ -20,7 +20,7 @@ namespace Minnow.General
             }
             public T4 this[T3 index]
             {
-                get { return _dictionary[index]; }
+                get => _dictionary[index];
             }
         }
 
@@ -32,6 +32,9 @@ namespace Minnow.General
 
         public ICollection<T1> Values1 => _forward.Keys;
         public ICollection<T2> Values2 => _reverse.Keys;
+
+        public T2 this[T1 key] => this.Forward[key];
+        public T1 this[T2 key] => this.Reverse[key];
 
         public Map(IEnumerable<T1> first, IEnumerable<T2> second) : this(first.Zip(second))
         {
@@ -63,7 +66,6 @@ namespace Minnow.General
                     _forward.Remove(t1);
                 }
             }
-            
         }
     }
 }

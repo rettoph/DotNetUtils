@@ -14,10 +14,9 @@ namespace System
     public class AssemblyHelper : IDisposable
     {
         /// <summary>
-        /// A list of assemblies that should be referenced by the adding
-        /// assembly in order to be tracked.
+        /// Any added assembly must reference one of these or be one of these.
         /// </summary>
-        private AssemblyName[] _shouldReference;
+        private AssemblyName[] _libraries;
 
         /// <summary>
         /// List of all unique assemblies loaded
@@ -25,81 +24,83 @@ namespace System
         private HashSet<Assembly> _assemblies;
 
         /// <summary>
-        /// List of all unique types loaded
-        /// </summary>
-        private HashSet<Type> _types;
-
-        /// <summary>
         /// List of all unique assemblies loaded
         /// </summary>
-        public IReadOnlyCollection<Assembly> Assemblies => _assemblies;
+        public IEnumerable<Assembly> Assemblies => _assemblies;
 
         /// <summary>
         /// List of all unique types loaded
         /// </summary>
-        public IReadOnlyCollection<Type> Types => _types;
+        public IEnumerable<Type> Types => this.Assemblies.SelectMany(a => a.GetTypes());
 
-        public IReadOnlyCollection<AssemblyName> WithAssembliesReferencing => _shouldReference;
+        /// <summary>
+        /// Any added assembly must reference one of these or be one of these.
+        /// </summary>
+        public IEnumerable<AssemblyName> Libraries => _libraries;
+
+        /// <summary>
+        /// Invoked when an assembly gets successfully added.
+        /// </summary>
+        public event OnEventDelegate<AssemblyHelper, Assembly> OnAssemblyLoaded;
 
         #region Helper Methods
         /// <summary>
         /// Create a new <see cref="AssemblyHelper"/> instance with a default <paramref name="entry"/>
-        /// and <paramref name="withAssembliesReferencing"/> assembly.
+        /// and <paramref name="libraries"/> assembly.
         /// </summary>
-        /// <param name="entry">The assembly to begin adding references too. This will default to <see cref="Assembly.GetEntryAssembly()"/>.</param>
-        /// <param name="withAssembliesReferencing">The assembly that must be referenced by all tracked nested assemblies. If no values are included this will default to <see cref="Assembly.GetExecutingAssembly()"/></param>
-        public AssemblyHelper(Assembly entry = default, IEnumerable<Assembly> withAssembliesReferencing = default)
+        /// <param name="libraries">Any added assembly must reference one of these or be one of these.</param>
+        public AssemblyHelper(IEnumerable<Assembly> libraries = default)
         {
             _assemblies = new HashSet<Assembly>();
-            _types = new HashSet<Type>();
 
-            _shouldReference = withAssembliesReferencing?.Select(a => a.GetName()).ToArray() ?? new AssemblyName[] 
-            {
-                Assembly.GetExecutingAssembly().GetName()
-            };
-
-            this.TryAddAssembly(entry ?? Assembly.GetEntryAssembly());
+            _libraries = libraries?.Select(a => a.GetName()).Distinct().ToArray() ?? Array.Empty<AssemblyName>();
         }
 
         /// <summary>
-        /// Ensure the recieved assembly references at least one item within <see cref="WithAssembliesReferencing"/>.
+        /// Ensure the recieved assembly references at least one item within <see cref="Libraries"/>.
         /// If it does, add the <paramref name="assembly"/> and all of its reference <see cref="Type"/>s to the <see cref="AssemblyHelper"/>.
         /// </summary>
         /// <param name="assembly"></param>
-        public void TryAddAssembly(Assembly assembly)
+        public bool TryLoadAssembly(Assembly assembly)
         {
             if(this.ShouldAddAssembly(assembly) && _assemblies.Add(assembly))
             {
-                this.AddAssembly(assembly);
+                this.AddReferenceAssemblies(assembly);
+
+                this.OnAssemblyLoaded?.Invoke(this, assembly);
+
+                return true;
             }
+
+            return false;
         }
 
         /// <summary>
         /// Add a new <see cref="Assembly"/> and all of its reference types to the <see cref="AssemblyHelper"/>.
         /// </summary>
         /// <param name="assembly"></param>
-        public void AddAssembly(Assembly assembly)
+        private void AddReferenceAssemblies(Assembly assembly)
         {
-            foreach (Type type in assembly.GetTypes())
-            {
-                _types.Add(type);
-            }
-
             foreach (Assembly referencedAssembly in assembly.GetReferencedAssemblies().Select(an => Assembly.Load(an)))
             {
-                this.TryAddAssembly(referencedAssembly);
+                this.TryLoadAssembly(referencedAssembly);
             }
         }
 
         protected Boolean ShouldAddAssembly(Assembly assembly)
         {
-            if(_shouldReference.Any(r => AssemblyName.ReferenceMatchesDefinition(assembly.GetName(), r)))
-            { // The recieved assmebly is the _shouldReference assembly...
+            if(_libraries.Count() == 0)
+            {
+                return true;
+            }
+
+            if(_libraries.Any(r => AssemblyName.ReferenceMatchesDefinition(assembly.GetName(), r)))
+            { // Check if the recieved assembly is an existing library...
                 return true;
             }
             
-            if(assembly.GetReferencedAssemblies().Any(nan => _shouldReference.Any(r => AssemblyName.ReferenceMatchesDefinition(nan, r))))
-            { // The recieved assembly references the _shouldReference assembly...
+            if(assembly.GetReferencedAssemblies().Any(nan => _libraries.Any(r => AssemblyName.ReferenceMatchesDefinition(nan, r))))
+            { // Ensure the assembly references a required library...
                 return true;
             }
 
@@ -109,7 +110,6 @@ namespace System
         public void Dispose()
         {
             _assemblies.Clear();
-            _types.Clear();
         }
         #endregion
     }

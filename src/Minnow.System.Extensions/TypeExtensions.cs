@@ -7,6 +7,11 @@ namespace System
 {
     public static class TypeExtensions
     {
+        public static bool IsConcrete(this Type type)
+        {
+            return type.IsClass && !type.IsAbstract && !type.IsInterface;
+        }
+
         public static IEnumerable<Type> GetTypesAssignableFrom<TBase>(this IEnumerable<Type> types)
         {
             return types.GetTypesAssignableFrom(typeof(TBase));
@@ -133,7 +138,7 @@ namespace System
                 yield return parent;
             }
             else
-            { // Add types until the base type is hit...
+            { // return types until the base type is hit...
                 while (parent.IsAssignableFrom(type))
                 {
                     yield return type;
@@ -145,7 +150,7 @@ namespace System
             => child.GetAncestors(typeof(TParent));
 
         /// <summary>
-        /// Verify that the base type is assignable from the given target type.
+        /// Verify that <paramref name="baseType"/> is assignable from the given <paramref name="targetType"/>.
         /// 
         /// If it is not, throw an exception.
         /// </summary>

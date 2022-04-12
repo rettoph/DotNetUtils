@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Guppy.Extensions.System.Collections
+namespace System.Collections.Generic
 {
     public static class ListExtensions
     {
@@ -11,6 +10,19 @@ namespace Guppy.Extensions.System.Collections
         {
             if (collection?.Any() ?? false)
                 list.AddRange(collection);
+        }
+
+        public static T AddAndReturn<T>(this IList<T> list, T item)
+        {
+            list.Add(item);
+            return item;
+        }
+
+        public static T AddAndReturn<T, TList>(this IList<TList> list, T item)
+            where T : TList
+        {
+            list.Add(item);
+            return item;
         }
     }
 }
