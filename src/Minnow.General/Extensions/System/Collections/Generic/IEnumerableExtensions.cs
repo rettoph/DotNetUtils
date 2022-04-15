@@ -10,22 +10,33 @@ namespace System.Collections.Generic
     public static class IEnumerableExtensions
     {
         public static Map<TKey1, TKey2> ToMap<TKey1, TKey2, TValue>(
-            this IEnumerable<TValue> input,
+            this IEnumerable<TValue> elements,
             Func<TValue, TKey1> keySelector1,
             Func<TValue, TKey2> keySelector2)
         {
-            return new Map<TKey1, TKey2>(input.Select(keySelector1), input.Select(keySelector2));
+            return new Map<TKey1, TKey2>(elements.Select(keySelector1), elements.Select(keySelector2));
         }
 
         public static DoubleDictionary<TKey1, TKey2, TValue> ToDoubleDictionary<TKey1, TKey2, TValue>(
-            this IEnumerable<TValue> values,
+            this IEnumerable<TValue> elements,
             Func<TValue, TKey1> keySelector1,
             Func<TValue, TKey2> keySelector2)
         {
             return new DoubleDictionary<TKey1, TKey2, TValue>(
                 keySelector1,
                 keySelector2,
-                values);
+                elements);
+        }
+
+        public static DoubleDictionary<TKey1, TKey2, TValue> ToDoubleDictionary<TKey1, TKey2, TValue, TInput>(
+            this IEnumerable<TInput> input,
+            Func<TInput, TKey1> keySelector1,
+            Func<TInput, TKey2> keySelector2,
+            Func<TInput, TValue> elementSelector)
+        {
+            var kkvps = input.Select(i => (keySelector1(i), keySelector2(i), elementSelector(i)));
+
+            return new DoubleDictionary<TKey1, TKey2, TValue>(kkvps);
         }
 
         public static DoubleDictionary<TKey1, TKey2, TValue> ToDoubleDictionary<TKey1, TKey2, TValue>(
