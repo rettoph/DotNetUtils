@@ -24,5 +24,21 @@ namespace Minnow.System.Helpers
 
             return Method;
         }
+
+        public static Func<IServiceProvider, TArg1, T> BuildFactory<TArg1, T>()
+            where T : class
+        {
+            Type[] args = new Type[] { typeof(TArg1) };
+            ObjectFactory factory = ActivatorUtilities.CreateFactory(typeof(T), args);
+            object[] buffer = new object[1];
+
+            T Method(IServiceProvider provider, TArg1 arg1)
+            {
+                buffer[0] = arg1;
+                return factory.Invoke(provider, buffer) as T;
+            }
+
+            return Method;
+        }
     }
 }

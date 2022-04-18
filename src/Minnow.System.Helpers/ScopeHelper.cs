@@ -9,7 +9,7 @@ namespace Minnow.System.Helpers
 {
     public static class ScopeHelper
     {
-        public static void GetActiveEventData(Object instance)
+        public static void GetActiveEventData(object instance)
         {
             EventInfo[] eventsInfo = instance.GetType().GetEvents(BindingFlags.Default);
 
