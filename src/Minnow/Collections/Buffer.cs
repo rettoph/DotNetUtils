@@ -9,18 +9,26 @@ namespace Minnow.Collections
 {
     public class Buffer<T> : IEnumerable<T>
     {
-        private T[] _buffer;
-        private int _length;
+        private T[] _array;
+        private int _position;
 
-        public Buffer(int capacity)
+        public readonly int Length;
+        public int Position => _position;
+        public int Size => Math.Min(this.Position, this.Length);
+        public T[] Array => _array;
+        public T this[int index] => _array[index];
+
+        public Buffer(int length)
         {
-            _buffer = new T[capacity];
-            _length = 0;
+            _array = new T[length];
+            _position = 0;
+
+            this.Length = length;
         }
 
         public void Add(T item)
         {
-            _buffer[_length++] = item;
+            _array[_position++ % this.Length] = item;
         }
 
         public void AddRange(IEnumerable<T> items)
@@ -35,23 +43,33 @@ namespace Minnow.Collections
         {
             this.Reset();
 
-            if (_buffer.Length == capacity)
+            if (_array.Length == capacity)
             {
                 return;
             }
 
-            _buffer = new T[capacity];
+            _array = new T[capacity];
         }
         public void Reset()
         {
-            _length = 0;
+            _position = 0;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            for (int i = 0; i < _length; i++)
+            if(_position < this.Length)
             {
-                yield return _buffer[i];
+                for (int i = 0; i < _position; i++)
+                {
+                    yield return _array[i];
+                }
+            }
+            else
+            {
+                for(int i=0; i<this.Length; i++)
+                {
+                    yield return _array[(_position + i) % this.Length];
+                }
             }
         }
 
