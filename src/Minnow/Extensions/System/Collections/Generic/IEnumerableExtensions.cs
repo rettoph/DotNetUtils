@@ -17,6 +17,13 @@ namespace System.Collections.Generic
             return new Map<TKey1, TKey2>(elements.Select(keySelector1), elements.Select(keySelector2));
         }
 
+        public static Map<TValue, TKey2> ToMap<TValue, TKey2>(
+            this IEnumerable<TValue> elements,
+            Func<TValue, TKey2> keySelector2)
+        {
+            return new Map<TValue, TKey2>(elements, elements.Select(keySelector2));
+        }
+
         public static DoubleDictionary<TKey1, TKey2, TValue> ToDoubleDictionary<TKey1, TKey2, TValue>(
             this IEnumerable<TValue> elements,
             Func<TValue, TKey1> keySelector1,
